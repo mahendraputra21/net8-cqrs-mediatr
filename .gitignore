@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/cqrs-mediatr/.vs/cqrs-mediatr/FileContentIndex
+/cqrs-mediatr/bin/Debug/net8.0
+/cqrs-mediatr/obj
