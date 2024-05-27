@@ -1,4 +1,4 @@
-﻿using cqrs_mediatr.Features.Products.Dtos;
+﻿using cqrs_mediatr.Models;
 using MediatR;
 
 namespace cqrs_mediatr.Features.Products.Queries.Get
