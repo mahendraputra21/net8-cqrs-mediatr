@@ -1,21 +1,45 @@
+using cqrs_mediatr.Behaviors;
+using cqrs_mediatr.Exceptions;
 using cqrs_mediatr.Features.Products.Commands.Create;
-using cqrs_mediatr.Features.Products.Commands.Delete;
-using cqrs_mediatr.Features.Products.Commands.Update;
-using cqrs_mediatr.Features.Products.Notifications;
-using cqrs_mediatr.Features.Products.Queries.Get;
-using cqrs_mediatr.Features.Products.Queries.List;
 using cqrs_mediatr.Persistence;
 using cqrs_mediatr.Routing;
-using MediatR;
+using FluentValidation;
+using System.Diagnostics;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 // Registering DB Context
 builder.Services.AddDbContext<AppDbContext>();
-// Registering MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+// Registering MediatR add pipeline behaviour
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
+
+// registering Fluent Validator
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+// Registering Global Exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+// Registering Problem Details
+builder.Services.AddProblemDetails( options =>
+{
+    options.CustomizeProblemDetails = (context) => 
+    {
+        if (!context.ProblemDetails.Extensions.ContainsKey("traceId"))
+        {
+            string? traceId = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
+            context.ProblemDetails.Extensions.Add(new KeyValuePair<string, object?>("traceId", traceId));
+        }
+    };
+});
 
 var app = builder.Build();
 
@@ -27,7 +51,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
+
+app.UseExceptionHandler();
+
 // Register Routing endpoints
 Routing.MapRoutes(app);
 
