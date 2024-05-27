@@ -1,4 +1,4 @@
-﻿using cqrs_mediatr.Features.Products.Dtos;
+﻿using cqrs_mediatr.Models;
 using cqrs_mediatr.Persistence;
 using MediatR;
 

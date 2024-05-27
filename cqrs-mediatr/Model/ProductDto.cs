@@ -1,4 +1,4 @@
-﻿namespace cqrs_mediatr.Features.Products.Dtos
+﻿namespace cqrs_mediatr.Models
 {
     public record ProductDto(Guid Id,
                              string Name,
