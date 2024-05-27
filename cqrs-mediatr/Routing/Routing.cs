@@ -4,6 +4,7 @@ using cqrs_mediatr.Features.Products.Commands.Update;
 using cqrs_mediatr.Features.Products.Notifications;
 using cqrs_mediatr.Features.Products.Queries.Get;
 using cqrs_mediatr.Features.Products.Queries.List;
+using FluentValidation;
 using MediatR;
 
 namespace cqrs_mediatr.Routing
@@ -28,8 +29,13 @@ namespace cqrs_mediatr.Routing
                     return Results.Ok(products);
                 });
 
-                endpoints.MapPost("/products", async (CreateProductCommand command, IMediator mediatr) =>
+                endpoints.MapPost("/products", async (CreateProductCommand command, IMediator mediatr, IValidator<CreateProductCommand> validator) =>
                 {
+                    var validationResult = await validator.ValidateAsync(command);
+
+                    if (!validationResult.IsValid)
+                        return Results.ValidationProblem(validationResult.ToDictionary());
+
                     var productId = await mediatr.Send(command);
                     if (Guid.Empty == productId) return Results.BadRequest();
                     await mediatr.Publish(new ProductCreatedNotification(productId));

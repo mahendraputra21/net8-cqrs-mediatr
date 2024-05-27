@@ -8,7 +8,7 @@ namespace cqrs_mediatr.Features.Products.Queries.Get
     {
         public async Task<ProductDto?> Handle(GetProductQuery request, CancellationToken cancellationToken)
         {
-            var product = await context.Products.FindAsync(request.Id);
+            var product = await context.Products.FindAsync(request.Id, cancellationToken);
             if (product == null)
             {
                 return null;
