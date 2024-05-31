@@ -10,7 +10,7 @@ namespace cqrs_mediatr.Features.Products.Queries.List
         public async Task<List<ProductDto>> Handle(ListProductsQuery request, CancellationToken cancellationToken)
         {
             return await context.Products
-                .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price))
+                .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.IsDeleted))
                 .ToListAsync();
         }
     }

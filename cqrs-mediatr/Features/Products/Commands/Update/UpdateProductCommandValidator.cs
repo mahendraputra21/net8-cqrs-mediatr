@@ -2,20 +2,21 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace cqrs_mediatr.Features.Products.Commands.Create
+namespace cqrs_mediatr.Features.Products.Commands.Update
 {
-    public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+    public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
     {
         private readonly AppDbContext _dbContext;
-        public CreateProductCommandValidator(AppDbContext dbContext)
+
+        public UpdateProductCommandValidator(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            
+
             RuleFor(x => x.Description).NotEmpty();
 
             RuleFor(p => p.Name).NotEmpty()
                                 .MinimumLength(4)
-                                .MustAsync(IsUniqueName)
+                                .MustAsync(BeUniqueName)
                                 .WithMessage("The product name already exists.");
 
             RuleFor(p => p.Price)
@@ -23,9 +24,9 @@ namespace cqrs_mediatr.Features.Products.Commands.Create
                 .LessThanOrEqualTo(1500).WithMessage("Product price cannot be more than 1500");
         }
 
-        private async Task<bool> IsUniqueName(string name, CancellationToken cancellationToken)
+        private async Task<bool> BeUniqueName(string name, CancellationToken cancellationToken)
         {
-            var isNameExists = await _dbContext.Products.AnyAsync(p => p.Name == name, cancellationToken); 
+            var isNameExists = await _dbContext.Products.AnyAsync(p => p.Name == name, cancellationToken);
             return !isNameExists;
         }
     }

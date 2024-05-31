@@ -71,8 +71,16 @@ namespace cqrs_mediatr.Routing
                 });
 
                 // Update Existing product by Id
-                endpoints.MapPut("/products", async (UpdateProductCommand command, ISender mediatr) =>
+                endpoints.MapPut("/products", async (UpdateProductCommand command,
+                                                     ISender mediatr,
+                                                     IValidator<UpdateProductCommand> validator) =>
                 {
+
+                    var validationResult = await validator.ValidateAsync(command);
+
+                    if (!validationResult.IsValid)
+                        return Results.ValidationProblem(validationResult.ToDictionary());
+
                     var productId = await mediatr.Send(command);
                     if (Guid.Empty == productId) 
                         return Results.BadRequest(new ApiResponseDto<object>(false, "Failed to update product"));
