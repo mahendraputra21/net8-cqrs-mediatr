@@ -9,7 +9,6 @@
         public bool IsDeleted { get; private set; } = false;
 
         // Parameterless constructor for EF Core
-        private Product() { }
         
         public Product(string name, string description, decimal price)
         {
