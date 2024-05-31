@@ -13,7 +13,7 @@ namespace cqrs_mediatr.Features.Products.Queries.Get
             {
                 return null;
             }
-            return new ProductDto(product.Id, product.Name, product.Description, product.Price);
+            return new ProductDto(product.Id, product.Name, product.Description, product.Price, product.IsDeleted);
         }
     }
 }

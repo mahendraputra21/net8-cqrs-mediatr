@@ -9,8 +9,11 @@ namespace cqrs_mediatr.Features.Products.Commands.Delete
         {
            var product = await context.Products.FindAsync(request.Id);
            if (product == null) return;
-           context.Products.Remove(product);
-           await context.SaveChangesAsync();
+           
+           product.InactiveProduct(product.IsDeleted);
+           
+           context.Products.Update(product);
+           await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -1,6 +1,5 @@
 using cqrs_mediatr.Behaviors;
 using cqrs_mediatr.Exceptions;
-using cqrs_mediatr.Features.Products.Commands.Create;
 using cqrs_mediatr.Persistence;
 using cqrs_mediatr.Routing;
 using FluentValidation;

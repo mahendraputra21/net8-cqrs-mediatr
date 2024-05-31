@@ -7,13 +7,15 @@ namespace cqrs_mediatr.Features.Products.Commands.Update
     {
         public async Task<Guid> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await context.Products.FindAsync(request.Id);
-            if (product == null) return Guid.Empty;
-            product.Name = request.Name;
-            product.Description = request.Description;
-            product.Price = request.Price;
+            var product = await context.Products.FindAsync(request.Id, cancellationToken);
+            
+            if (product == null) 
+                return Guid.Empty;
+
+            product.UpdateProduct(request.Name, request.Description, request.Price);
             context.Products.Update(product);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
+
             return product.Id;
         }
     }
