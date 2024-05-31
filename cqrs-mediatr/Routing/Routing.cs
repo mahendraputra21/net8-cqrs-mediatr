@@ -1,9 +1,11 @@
-﻿using cqrs_mediatr.Features.Products.Commands.Create;
+﻿using cqrs_mediatr.Features.Carts.Commands.Create;
+using cqrs_mediatr.Features.Products.Commands.Create;
 using cqrs_mediatr.Features.Products.Commands.Delete;
 using cqrs_mediatr.Features.Products.Commands.Update;
 using cqrs_mediatr.Features.Products.Notifications;
 using cqrs_mediatr.Features.Products.Queries.Get;
 using cqrs_mediatr.Features.Products.Queries.List;
+using cqrs_mediatr.Model;
 using cqrs_mediatr.Models;
 using FluentValidation;
 using MediatR;
@@ -19,7 +21,7 @@ namespace cqrs_mediatr.Routing
                 #region Product Endpoints
                 
                 // Get Product by Id
-                endpoints.MapGet("/products/{id:guid}", async (Guid id, ISender mediatr) =>
+                endpoints.MapGet("/product/{id:guid}", async (Guid id, ISender mediatr) =>
                 {
                     var product = await mediatr.Send(new GetProductQuery(id));
                     if (product == null) return Results.NotFound(new ApiResponseDto<object>(false, "Product not found"));
@@ -46,7 +48,7 @@ namespace cqrs_mediatr.Routing
                 });
 
                 // Add new Product
-                endpoints.MapPost("/products", async (
+                endpoints.MapPost("/product", async (
                     CreateProductCommand command,
                     IMediator mediatr,
                     IValidator<CreateProductCommand> validator) =>
@@ -71,7 +73,7 @@ namespace cqrs_mediatr.Routing
                 });
 
                 // Update Existing product by Id
-                endpoints.MapPut("/products", async (UpdateProductCommand command,
+                endpoints.MapPut("/product", async (UpdateProductCommand command,
                                                      ISender mediatr,
                                                      IValidator<UpdateProductCommand> validator) =>
                 {
@@ -93,12 +95,32 @@ namespace cqrs_mediatr.Routing
                 });
 
                 // Delete Existing product by Id
-                endpoints.MapDelete("/products/{id:guid}", async (Guid id, ISender mediatr) =>
+                endpoints.MapDelete("/product/{id:guid}", async (Guid id, ISender mediatr) =>
                 {
                     await mediatr.Send(new DeleteProductCommand(id));
                     return Results.NoContent();
                 });
                 #endregion
+
+                #region Cart Endpoints
+
+                // Add Product to cart
+                endpoints.MapPost("/cart", async (
+                        CreateCartCommand command,
+                        ISender mediatr) =>
+                {
+
+                    var cartDto = await mediatr.Send(command);
+                   
+                    var result = new ApiResponseDto<object>(
+                                                true,
+                                                "Product Added successfully on Cart",
+                                                new { cartDto });
+
+                    return Results.Created($"/cart/{cartDto.Id}", result);
+                });
+                #endregion
+
             });
         }
     }
