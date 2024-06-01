@@ -17,6 +17,7 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
         public async Task<CartDto> Handle(CreateCartCommand request, CancellationToken cancellationToken)
         {
             var cart = await _dbContext.Carts.Include(c => c.Items)
+                                             .ThenInclude(i => i.Product) // Ensure product is included for price calculation
                                              .FirstOrDefaultAsync(c => c.Id == request.CartId, cancellationToken);
 
             var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken);
@@ -55,12 +56,19 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             // Manual mapping
-            var cartItemsDto = cart.Items.Select(item => new CartItemDto(
-                item.Product.Id,
-                item.Product.Name,
-                item.Product.Description,
-                item.Quantity
-            )).ToList();
+            var cartItemsDto = new List<CartItemDto>();
+
+            foreach (var item in cart.Items)
+            {
+                var cartItemDto = new CartItemDto(
+                    item.Product.Id,
+                    item.Product.Name,
+                    item.Product.Description,
+                    item.Quantity
+                );
+                cartItemsDto.Add(cartItemDto);
+            }
+
 
             var cartDto = new CartDto(
                 cart.Id,

@@ -8,6 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Carts\Commands\Delete\**" />
+    <Compile Remove="Features\Carts\Commands\Update\**" />
+    <Compile Remove="Features\Carts\Queries\**" />
+    <Content Remove="Features\Carts\Commands\Delete\**" />
+    <Content Remove="Features\Carts\Commands\Update\**" />
+    <Content Remove="Features\Carts\Queries\**" />
+    <EmbeddedResource Remove="Features\Carts\Commands\Delete\**" />
+    <EmbeddedResource Remove="Features\Carts\Commands\Update\**" />
+    <EmbeddedResource Remove="Features\Carts\Queries\**" />
+    <None Remove="Features\Carts\Commands\Delete\**" />
+    <None Remove="Features\Carts\Commands\Update\**" />
+    <None Remove="Features\Carts\Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.9.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
@@ -15,12 +30,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Carts\Commands\Delete\" />
-    <Folder Include="Features\Carts\Commands\Update\" />
-    <Folder Include="Features\Carts\Queries\" />
   </ItemGroup>
 
 </Project>
