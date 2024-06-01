@@ -1,17 +1,25 @@
-﻿using cqrs_mediatr.Models;
-using cqrs_mediatr.Persistence;
+﻿using AutoMapper;
+using cqrs_mediatr.Models;
+using cqrs_mediatr.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace cqrs_mediatr.Features.Products.Queries.List
 {
-    public class ListProductsQueryHandler(AppDbContext context) : IRequestHandler<ListProductsQuery, List<ProductDto>>
+    public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, List<ProductDto>>
     {
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
+
+        public ListProductsQueryHandler(IProductRepository productRepository, IMapper mapper)
+        {
+            _productRepository = productRepository;
+            _mapper = mapper;
+        }
+
         public async Task<List<ProductDto>> Handle(ListProductsQuery request, CancellationToken cancellationToken)
         {
-            return await context.Products
-                .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.IsDeleted))
-                .ToListAsync();
+           var products = await _productRepository.GetAllProductsAsync(cancellationToken);
+           return _mapper.Map<List<ProductDto>>(products);
         }
     }
 }

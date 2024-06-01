@@ -1,16 +1,15 @@
-﻿using cqrs_mediatr.Persistence;
+﻿using cqrs_mediatr.Repositories;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace cqrs_mediatr.Features.Products.Commands.Create
 {
     public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
     {
-        private readonly AppDbContext _dbContext;
-        public CreateProductCommandValidator(AppDbContext dbContext)
+       private readonly IProductRepository _productRepository;
+        public CreateProductCommandValidator(IProductRepository productRepository)
         {
-            _dbContext = dbContext;
-            
+            _productRepository = productRepository;
+
             RuleFor(x => x.Description).NotEmpty();
 
             RuleFor(p => p.Name).NotEmpty()
@@ -21,11 +20,12 @@ namespace cqrs_mediatr.Features.Products.Commands.Create
             RuleFor(p => p.Price)
                 .GreaterThanOrEqualTo(0).WithMessage("Product price must be greater than zero")
                 .LessThanOrEqualTo(1500).WithMessage("Product price cannot be more than 1500");
+            
         }
 
         private async Task<bool> IsUniqueName(string name, CancellationToken cancellationToken)
         {
-            var isNameExists = await _dbContext.Products.AnyAsync(p => p.Name == name, cancellationToken); 
+            var isNameExists = await _productRepository.IsUniqueProductNameAsync(name, cancellationToken);
             return !isNameExists;
         }
     }
