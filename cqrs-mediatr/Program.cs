@@ -21,6 +21,9 @@ builder.Services.AddMediatR(cfg =>
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
+// Registering Automapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 // registering Fluent Validator
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

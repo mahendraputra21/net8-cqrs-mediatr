@@ -1,4 +1,5 @@
-﻿using cqrs_mediatr.Model;
+﻿using AutoMapper;
+using cqrs_mediatr.Model;
 using cqrs_mediatr.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,12 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
     public class CreateCartCommandHandler : IRequestHandler<CreateCartCommand, CartDto>
     {
         private readonly AppDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public CreateCartCommandHandler(AppDbContext dbContext)
+        public CreateCartCommandHandler(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<CartDto> Handle(CreateCartCommand request, CancellationToken cancellationToken)
@@ -34,47 +37,23 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
                     cart = cartNew; // Assign the new cart to the cart variable
                 }
                 else
-                {
                     // Handle the case where the product is null
                     throw new InvalidOperationException("Product does not exist.");
-                }
             }
             else
             {
                 // Add the item to the existing cart
                 if (product != null)
-                {
                     cart.AddCartItem(product, request.Quatity);
-                }
                 else
-                {
                     // Handle the case where the product is null
                     throw new InvalidOperationException("Product does not exist.");
-                }
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            // Manual mapping
-            var cartItemsDto = new List<CartItemDto>();
-
-            foreach (var item in cart.Items)
-            {
-                var cartItemDto = new CartItemDto(
-                    item.Product.Id,
-                    item.Product.Name,
-                    item.Product.Description,
-                    item.Quantity
-                );
-                cartItemsDto.Add(cartItemDto);
-            }
-
-
-            var cartDto = new CartDto(
-                cart.Id,
-                cartItemsDto,
-                cart.TotalPrice
-            );
+            // Use AutoMapper to map Cart to CartDto
+            var cartDto = _mapper.Map<CartDto>(cart);
 
             return cartDto;
         }
