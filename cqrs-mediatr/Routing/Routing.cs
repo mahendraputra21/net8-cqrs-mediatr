@@ -5,7 +5,6 @@ using cqrs_mediatr.Features.Products.Commands.Update;
 using cqrs_mediatr.Features.Products.Notifications;
 using cqrs_mediatr.Features.Products.Queries.Get;
 using cqrs_mediatr.Features.Products.Queries.List;
-using cqrs_mediatr.Model;
 using cqrs_mediatr.Models;
 using FluentValidation;
 using MediatR;

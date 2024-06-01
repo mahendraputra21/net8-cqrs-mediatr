@@ -4,5 +4,5 @@
                              string Name,
                              string Description,
                              decimal Price,
-                             bool IsDeletd);
+                             bool IsDeleted);
 }

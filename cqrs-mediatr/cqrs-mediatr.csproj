@@ -11,15 +11,19 @@
     <Compile Remove="Features\Carts\Commands\Delete\**" />
     <Compile Remove="Features\Carts\Commands\Update\**" />
     <Compile Remove="Features\Carts\Queries\**" />
+    <Compile Remove="NewFolder\**" />
     <Content Remove="Features\Carts\Commands\Delete\**" />
     <Content Remove="Features\Carts\Commands\Update\**" />
     <Content Remove="Features\Carts\Queries\**" />
+    <Content Remove="NewFolder\**" />
     <EmbeddedResource Remove="Features\Carts\Commands\Delete\**" />
     <EmbeddedResource Remove="Features\Carts\Commands\Update\**" />
     <EmbeddedResource Remove="Features\Carts\Queries\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
     <None Remove="Features\Carts\Commands\Delete\**" />
     <None Remove="Features\Carts\Commands\Update\**" />
     <None Remove="Features\Carts\Queries\**" />
+    <None Remove="NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,7 @@
 using cqrs_mediatr.Behaviors;
 using cqrs_mediatr.Exceptions;
 using cqrs_mediatr.Persistence;
+using cqrs_mediatr.Repositories.Configuration;
 using cqrs_mediatr.Routing;
 using FluentValidation;
 using System.Diagnostics;
@@ -42,6 +43,9 @@ builder.Services.AddProblemDetails( options =>
         }
     };
 });
+
+// Registeering DI
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 

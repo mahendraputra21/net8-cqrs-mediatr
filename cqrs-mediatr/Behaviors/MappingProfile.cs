@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using cqrs_mediatr.Domain;
 using cqrs_mediatr.Model;
+using cqrs_mediatr.Models;
 
 namespace cqrs_mediatr.Behaviors
 {
@@ -16,6 +17,8 @@ namespace cqrs_mediatr.Behaviors
                 .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
             CreateMap<Cart, CartDto>();
+
+            CreateMap<Product, ProductDto>();
         }
     }
 }
