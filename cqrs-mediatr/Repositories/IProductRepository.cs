@@ -15,24 +15,27 @@ namespace cqrs_mediatr.Repositories
 
     public class ProductRepository : Repository<Product>, IProductRepository
     {
-        public ProductRepository(AppDbContext db) : base(db)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductRepository(AppDbContext db, IUnitOfWork unitOfWork) : base(db)
         {
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> CreateProductAsync(Product product, CancellationToken cancellationToken)
-        {
+        {            
            await InsertAsync(product, cancellationToken);
+           await _unitOfWork.SaveChangesAsync(cancellationToken);  
            return product.Id;
         }
 
         public async Task<List<Product>> GetAllProductsAsync(CancellationToken cancellationToken)
         {
-            return await db.Products.ToListAsync(cancellationToken);
+            return await db.Products.AsNoTracking().ToListAsync(cancellationToken);
         }
 
         public async Task<bool> IsUniqueProductNameAsync(string productName, CancellationToken cancellationToken)
         {
-            var isNameExists = await db.Products.AnyAsync(x => x.Name == productName, cancellationToken);
+            var isNameExists = await db.Products.AsNoTracking().AnyAsync(x => x.Name == productName, cancellationToken);
             return isNameExists;
         }
 
@@ -45,7 +48,8 @@ namespace cqrs_mediatr.Repositories
 
         public async Task<Product> UpdateProductAsync(Product product, CancellationToken cancellationToken)
         {
-            await UpdateAsync(product, cancellationToken);
+            UpdateAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return product;
         }
     }
