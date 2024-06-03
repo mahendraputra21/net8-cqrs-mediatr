@@ -15,20 +15,17 @@ namespace cqrs_mediatr.Repositories
         public async Task<T> InsertAsync(T entity, CancellationToken cancellationToken)
         {
             await db.Set<T>().AddAsync(entity, cancellationToken);
-            await db.SaveChangesAsync(cancellationToken);
             return entity;
         }
 
-        public async Task DeleteAsync(T entity, CancellationToken cancellationToken)
+        public void Delete(T entity, CancellationToken cancellationToken)
         {
             db.Set<T>().Remove(entity);
-            await db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+        public void UpdateAsync(T entity, CancellationToken cancellationToken)
         {
             db.Entry<T>(entity).State = EntityState.Modified;
-            await db.SaveChangesAsync(cancellationToken);
         }
     }
 }

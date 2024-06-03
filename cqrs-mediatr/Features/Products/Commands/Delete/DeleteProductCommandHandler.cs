@@ -1,4 +1,5 @@
-﻿using cqrs_mediatr.Repositories;
+﻿using cqrs_mediatr.Persistence;
+using cqrs_mediatr.Repositories;
 using MediatR;
 
 namespace cqrs_mediatr.Features.Products.Commands.Delete
@@ -6,10 +7,12 @@ namespace cqrs_mediatr.Features.Products.Commands.Delete
     public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
     {
         private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteProductCommandHandler(IProductRepository productRepository)
+        public DeleteProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
@@ -19,7 +22,8 @@ namespace cqrs_mediatr.Features.Products.Commands.Delete
            
            product.InactiveProduct(product.IsDeleted);
            
-           await _productRepository.UpdateAsync(product, cancellationToken);
+           _productRepository.UpdateAsync(product, cancellationToken);
+           await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }
