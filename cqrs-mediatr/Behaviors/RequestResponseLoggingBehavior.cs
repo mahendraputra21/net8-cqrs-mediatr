@@ -1,24 +1,24 @@
-﻿using MediatR;
+﻿using Mediator;
 using System.Text.Json;
 
 namespace cqrs_mediatr.Behaviors
 {
-    public class RequestResponseLoggingBehavior<TRequest, TResponse>(ILogger<RequestResponseLoggingBehavior<TRequest, TResponse>> logger)
-    : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : class
+    public class RequestResponseLoggingBehavior<TMessage, TResponse>(ILogger<RequestResponseLoggingBehavior<TMessage, TResponse>> logger)
+    : IPipelineBehavior<TMessage, TResponse>
+    where TMessage : IMessage
     {
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public async ValueTask<TResponse> Handle(TMessage message, CancellationToken cancellationToken, MessageHandlerDelegate<TMessage, TResponse> next)
         {
             var correlationId = Guid.NewGuid();
 
             // Request Logging
             // Serialize the request
-            var requestJson = JsonSerializer.Serialize(request);
+            var requestJson = JsonSerializer.Serialize(message);
             // Log the serialized request
             logger.LogInformation("Handling request {CorrelationID}: {Request}", correlationId, requestJson);
 
             // Response logging
-            var response = await next();
+            var response = await next(message, cancellationToken);
             // Serialize the request
             var responseJson = JsonSerializer.Serialize(response);
             // Log the serialized request

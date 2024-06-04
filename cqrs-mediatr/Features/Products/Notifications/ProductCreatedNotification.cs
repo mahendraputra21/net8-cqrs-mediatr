@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 
 namespace cqrs_mediatr.Features.Products.Notifications
 {

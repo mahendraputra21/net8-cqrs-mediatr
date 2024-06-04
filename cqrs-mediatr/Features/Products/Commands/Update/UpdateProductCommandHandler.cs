@@ -1,6 +1,6 @@
 ﻿using cqrs_mediatr.Persistence;
 using cqrs_mediatr.Repositories;
-using MediatR;
+using Mediator;
 
 namespace cqrs_mediatr.Features.Products.Commands.Update
 {
@@ -15,7 +15,7 @@ namespace cqrs_mediatr.Features.Products.Commands.Update
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Guid> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.SelectProductByIdAsync(request.Id, cancellationToken);
             

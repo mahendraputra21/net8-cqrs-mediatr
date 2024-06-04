@@ -1,5 +1,5 @@
 ﻿using cqrs_mediatr.Models;
-using MediatR;
+using Mediator;
 
 namespace cqrs_mediatr.Features.Products.Queries.List
 {

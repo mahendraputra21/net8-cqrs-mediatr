@@ -1,19 +1,19 @@
 ﻿using FluentValidation;
-using MediatR;
+using Mediator;
 
 namespace cqrs_mediatr.Behaviors
 {
-    public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
-    : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : class
+    public class ValidationBehavior<TMessage, TResponse>(IEnumerable<IValidator<TMessage>> validators)
+    : IPipelineBehavior<TMessage, TResponse>
+    where TMessage : IMessage
     {
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public async ValueTask<TResponse> Handle(TMessage message, CancellationToken cancellationToken, MessageHandlerDelegate<TMessage, TResponse> next)
         {
             ArgumentNullException.ThrowIfNull(next);
 
             if (validators.Any())
             {
-                var context = new ValidationContext<TRequest>(request);
+                var context = new ValidationContext<TMessage>(message);
 
                 var validationResults = await Task.WhenAll(
                     validators.Select(v =>
@@ -27,7 +27,7 @@ namespace cqrs_mediatr.Behaviors
                 if (failures.Count > 0)
                     throw new FluentValidation.ValidationException(failures);
             }
-            return await next().ConfigureAwait(false);
+            return await next(message, cancellationToken).ConfigureAwait(false);
         }
     }
 }

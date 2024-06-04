@@ -1,6 +1,6 @@
 ﻿using cqrs_mediatr.Models;
 using cqrs_mediatr.Repositories;
-using MediatR;
+using Mediator;
 
 namespace cqrs_mediatr.Features.Products.Queries.Get
 {
@@ -13,7 +13,7 @@ namespace cqrs_mediatr.Features.Products.Queries.Get
             _productRepository = productRepository;
         }
 
-        public async Task<ProductDto?> Handle(GetProductQuery request, CancellationToken cancellationToken)
+        public async ValueTask<ProductDto?> Handle(GetProductQuery request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.SelectProductByIdAsync(request.Id, cancellationToken);
             if (product == null) return null;

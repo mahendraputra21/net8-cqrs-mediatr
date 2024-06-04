@@ -7,7 +7,7 @@ using cqrs_mediatr.Features.Products.Queries.Get;
 using cqrs_mediatr.Features.Products.Queries.List;
 using cqrs_mediatr.Models;
 using FluentValidation;
-using MediatR;
+using Mediator;
 
 namespace cqrs_mediatr.Routing
 {

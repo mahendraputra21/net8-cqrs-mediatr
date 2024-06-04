@@ -1,15 +1,15 @@
 ﻿using cqrs_mediatr.Persistence;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Mediator;
 
 namespace cqrs_mediatr.Behaviors
 {
     /// <summary>
     /// Adds transaction to the processing pipeline
     /// </summary>
-    /// <typeparam name="TRequest"></typeparam>
+    /// <typeparam name="TMessage"></typeparam>
     /// <typeparam name="TResponse"></typeparam>
-    public class DBContextTransactionPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class DBContextTransactionPipelineBehavior<TMessage, TResponse> : IPipelineBehavior<TMessage, TResponse>
+    where TMessage : IMessage // Constrained to IMessage, or constrain to IBaseCommand or any custom interface you've implemented
     {
         private readonly AppDbContext _appDbContext;
 
@@ -18,13 +18,13 @@ namespace cqrs_mediatr.Behaviors
             _appDbContext = appDbContext;
         }
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public async ValueTask<TResponse> Handle(TMessage message, CancellationToken cancellationToken, MessageHandlerDelegate<TMessage, TResponse> next)
         {
-           TResponse? result = default;
+            TResponse? result = default;
             try
             {
                 _appDbContext.Database.BeginTransaction();
-                result = await next();
+                result = await next(message, cancellationToken);
                 _appDbContext.Database.CommitTransaction();
             }
             catch (Exception)

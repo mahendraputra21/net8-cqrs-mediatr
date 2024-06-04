@@ -2,7 +2,7 @@
 using cqrs_mediatr.Model;
 using cqrs_mediatr.Persistence;
 using cqrs_mediatr.Repositories;
-using MediatR;
+using Mediator;
 
 namespace cqrs_mediatr.Features.Carts.Commands.Create
 {
@@ -25,7 +25,7 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
             _productRepository = productRepository;
         }
 
-        public async Task<CartDto> Handle(CreateCartCommand request, CancellationToken cancellationToken)
+        public async ValueTask<CartDto> Handle(CreateCartCommand request, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.GetCartByCartIdAsync(request.CartId, cancellationToken);
 
@@ -38,7 +38,7 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
                 {
                     var newCartId = Guid.NewGuid();
                     var cartNew = new Domain.Cart(newCartId);
-                    cartNew.AddCartItem(product, request.Quatity);
+                    cartNew.AddCartItem(product, request.Quantity);
                     await _cartRepository.CreateCartAsync(cartNew, cancellationToken);
                     cart = cartNew; // Assign the new cart to the cart variable
                 }
@@ -50,7 +50,7 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
             {
                 // Add the item to the existing cart
                 if (product != null)
-                    cart.AddCartItem(product, request.Quatity);
+                    cart.AddCartItem(product, request.Quantity);
                 else
                     // Handle the case where the product is null
                     throw new InvalidOperationException("Product does not exist.");
