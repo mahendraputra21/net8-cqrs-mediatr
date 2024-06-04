@@ -4,6 +4,7 @@ using cqrs_mediatr.Persistence;
 using cqrs_mediatr.Repositories.Configuration;
 using cqrs_mediatr.Routing;
 using FluentValidation;
+using MediatR;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -20,6 +21,7 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
     cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    cfg.AddOpenBehavior(typeof(DBContextTransactionPipelineBehavior<,>));
 });
 
 // Registering Automapper

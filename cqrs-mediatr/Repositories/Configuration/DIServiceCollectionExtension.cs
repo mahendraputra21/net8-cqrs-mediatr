@@ -1,5 +1,4 @@
-﻿using cqrs_mediatr.Behaviors;
-using cqrs_mediatr.Persistence;
+﻿using cqrs_mediatr.Persistence;
 
 namespace cqrs_mediatr.Repositories.Configuration
 {
@@ -9,6 +8,7 @@ namespace cqrs_mediatr.Repositories.Configuration
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
             return services;
         }
     }
