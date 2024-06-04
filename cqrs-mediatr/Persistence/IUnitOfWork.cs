@@ -1,12 +1,7 @@
-﻿using System.Data;
-
-namespace cqrs_mediatr.Persistence
+﻿namespace cqrs_mediatr.Persistence
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-        void BeginTransaction();
-        Task CommitTransactionAsync(CancellationToken cancellationToken);
-        void RollbackTransaction();
     }
 }

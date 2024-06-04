@@ -1,10 +1,14 @@
 ﻿using cqrs_mediatr.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace cqrs_mediatr.Persistence
 {
     public class AppDbContext : DbContext
     {
+        private IDbContextTransaction? _currentTransaction;
+
         public AppDbContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
@@ -36,6 +40,12 @@ namespace cqrs_mediatr.Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase("codewithDewz");
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }
