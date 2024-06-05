@@ -5,6 +5,7 @@ using cqrs_mediatr.Features.Products.Commands.Update;
 using cqrs_mediatr.Features.Products.Notifications;
 using cqrs_mediatr.Features.Products.Queries.Get;
 using cqrs_mediatr.Features.Products.Queries.List;
+using cqrs_mediatr.Model;
 using cqrs_mediatr.Models;
 using FluentValidation;
 using MediatR;
@@ -22,9 +23,16 @@ namespace cqrs_mediatr.Routing
                 // Get Product by Id
                 endpoints.MapGet("/product/{id:guid}", async (Guid id, ISender mediatr) =>
                 {
-                    var product = await mediatr.Send(new GetProductQuery(id));
-                    if (product == null) return Results.NotFound(new ApiResponseDto<object>(false, "Product not found"));
+                    var query = new GetProductQuery(id);
 
+                    var product = await mediatr.Send(query);
+                    
+                    if (product == null)
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "Product not found");
+                        return Results.NotFound(errorResponse);
+                    }
+                       
                     var result = new ApiResponseDto<object>(
                                             true,
                                             "Product retrieved successfully",
@@ -36,7 +44,9 @@ namespace cqrs_mediatr.Routing
                 // Get Product list
                 endpoints.MapGet("/products", async (ISender mediatr) =>
                 {
-                    var products = await mediatr.Send(new ListProductsQuery());
+                    var query = new ListProductsQuery();
+
+                    var products = await mediatr.Send(query);
 
                     var result = new ApiResponseDto<object>(
                                             true,
@@ -48,19 +58,28 @@ namespace cqrs_mediatr.Routing
 
                 // Add new Product
                 endpoints.MapPost("/product", async (
-                    CreateProductCommand command,
+                    ProductDto request,
                     IMediator mediatr,
                     IValidator<CreateProductCommand> validator) =>
                 {
+                    var command = new CreateProductCommand(
+                        request.Name,
+                        request.Description,
+                        request.Price);
+
                     var validationResult = await validator.ValidateAsync(command);
 
                     if (!validationResult.IsValid)
                         return Results.ValidationProblem(validationResult.ToDictionary());
 
                     var productId = await mediatr.Send(command);
-                    if (Guid.Empty == productId) 
-                        return Results.BadRequest(new ApiResponseDto<object>(false, "Failed to create product"));
 
+                    if (Guid.Empty == productId)
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "Failed to create product");
+                        return Results.BadRequest(errorResponse);
+                    }
+                       
                     await mediatr.Publish(new ProductCreatedNotification(productId));
 
                     var result = new ApiResponseDto<object>(
@@ -72,10 +91,15 @@ namespace cqrs_mediatr.Routing
                 });
 
                 // Update Existing product by Id
-                endpoints.MapPut("/product", async (UpdateProductCommand command,
+                endpoints.MapPut("/product", async (ProductDto request,
                                                      ISender mediatr,
                                                      IValidator<UpdateProductCommand> validator) =>
                 {
+                    var command = new UpdateProductCommand
+                        (request.Id,
+                        request.Name,
+                        request.Description,
+                        request.Price);
 
                     var validationResult = await validator.ValidateAsync(command);
 
@@ -83,9 +107,13 @@ namespace cqrs_mediatr.Routing
                         return Results.ValidationProblem(validationResult.ToDictionary());
 
                     var productId = await mediatr.Send(command);
-                    if (Guid.Empty == productId) 
-                        return Results.BadRequest(new ApiResponseDto<object>(false, "Failed to update product"));
 
+                    if (Guid.Empty == productId)
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "Failed to update product");
+                        return Results.BadRequest(errorResponse);
+                    }
+                       
                     var result = new ApiResponseDto<object>(true,
                                             "Product updated successfully",
                                             new { id = productId });
@@ -105,9 +133,13 @@ namespace cqrs_mediatr.Routing
 
                 // Add Product to cart
                 endpoints.MapPost("/cart", async (
-                        CreateCartCommand command,
+                        CreateCartRequest request,
                         ISender mediatr) =>
                 {
+                    var command = new CreateCartCommand(
+                        request.CartId,
+                        request.ProductId,
+                        request.Quatity);
 
                     var cartDto = await mediatr.Send(command);
                    
