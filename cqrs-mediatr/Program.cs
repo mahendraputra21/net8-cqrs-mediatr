@@ -14,6 +14,7 @@ using Mediator;
 using System.Diagnostics;
 using System.Reflection;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,13 +23,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
 
 // Registering MediatR add pipeline behaviour
-
 builder.Services.AddMediator(options =>
 {
     options.ServiceLifetime = ServiceLifetime.Scoped;
 });
 
-builder.Services.AddScoped<IGuidGenerator, DefaultGuidGenerator>();
+builder.Services.AddSingleton<IGuidGenerator, DefaultGuidGenerator>();
+builder.Services.AddSingleton<IInt32Generator, Int32Generator>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();

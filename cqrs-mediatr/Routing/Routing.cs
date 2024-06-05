@@ -108,7 +108,6 @@ namespace cqrs_mediatr.Routing
                         CreateCartCommand command,
                         ISender mediatr) =>
                 {
-
                     var cartDto = await mediatr.Send(command);
                    
                     var result = new ApiResponseDto<object>(

@@ -7,19 +7,20 @@ namespace cqrs_mediatr.Features.Carts.Commands.Create
     public class CreateCartCommand : IRequest<CartDto>
     {
         private readonly IGuidGenerator _guidGenerator;
-        public Guid CartId { get; set; } 
-        public Guid ProductId { get; set; } 
-        public int Quantity { get; set; }
+        private readonly IInt32Generator _int32Generator;
 
-        public CreateCartCommand(Guid cartId, Guid productId, int quantity, IGuidGenerator guidGenerator)
+        public Guid CartId { get; private set; }
+        public Guid ProductId { get; private set; } 
+        public int Quantity { get; private set; }
+
+        public CreateCartCommand(Guid CartId, Guid ProductId, int Quantity, IGuidGenerator typeDataGenerator, IInt32Generator int32Generator)
         {
-            _guidGenerator = guidGenerator;
-
+            _guidGenerator = typeDataGenerator;
+            _int32Generator = int32Generator;
             CartId = _guidGenerator.GenerateGuid();
             ProductId = _guidGenerator.GenerateGuid();
-            Quantity = quantity;
+            Quantity = _int32Generator.GenerateInt32();
             
         }
     }
-
 }
