@@ -48,10 +48,15 @@ namespace cqrs_mediatr.Routing
 
                 // Add new Product
                 endpoints.MapPost("/product", async (
-                    CreateProductCommand command,
+                    ProductDto request,
                     IMediator mediatr,
                     IValidator<CreateProductCommand> validator) =>
                 {
+                    var command = new CreateProductCommand(
+                        request.Name,
+                        request.Description,
+                        request.Price);
+
                     var validationResult = await validator.ValidateAsync(command);
 
                     if (!validationResult.IsValid)

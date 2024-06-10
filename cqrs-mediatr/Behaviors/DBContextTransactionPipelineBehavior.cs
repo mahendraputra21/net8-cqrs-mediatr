@@ -1,6 +1,5 @@
 ﻿using cqrs_mediatr.Persistence;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace cqrs_mediatr.Behaviors
 {
