@@ -1,9 +1,8 @@
 using cqrs_mediatr.Routing;
 using cqrs_mediatr.Configuration;
+using cqrs_mediatr.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Registering MediatR add pipeline behaviour
 builder.Services.AddMediator(options =>
@@ -16,6 +15,9 @@ builder.Services.AddDependencyInjection();
 
 var app = builder.Build();
 
+// add Identity endpoints
+app.MapIdentityApi<User>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -26,6 +28,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseExceptionHandler();
 
