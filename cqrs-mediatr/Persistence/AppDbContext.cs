@@ -1,18 +1,18 @@
 ﻿using cqrs_mediatr.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace cqrs_mediatr.Persistence
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>, IUnitOfWork
     {
-        private IDbContextTransaction? _currentTransaction;
-
         public AppDbContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
         }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
@@ -36,6 +36,10 @@ namespace cqrs_mediatr.Persistence
                     .HasForeignKey(e => e.ProductId);
             });
 
+            modelBuilder.Entity<User>().Property(u => u.Initials).HasMaxLength(5);
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(p => p.UserId);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
+            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(p => new { p.UserId, p.LoginProvider, p.Name });
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

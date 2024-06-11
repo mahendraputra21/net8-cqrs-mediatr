@@ -17,7 +17,7 @@ namespace cqrs_mediatr.Exceptions
                 problemDetails.Title = "one or more validation errors occurred.";
                 problemDetails.Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1";
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-                List<string> validationErrors = new List<string>();
+                List<string> validationErrors = new();
                 foreach (var error in fluentException.Errors)
                 {
                     validationErrors.Add(error.ErrorMessage);

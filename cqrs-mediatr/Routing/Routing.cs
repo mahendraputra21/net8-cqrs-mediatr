@@ -1,14 +1,17 @@
-﻿using cqrs_mediatr.Features.Carts.Commands.Create;
+﻿using cqrs_mediatr.Domain;
+using cqrs_mediatr.Features.Carts.Commands.Create;
 using cqrs_mediatr.Features.Products.Commands.Create;
 using cqrs_mediatr.Features.Products.Commands.Delete;
 using cqrs_mediatr.Features.Products.Commands.Update;
 using cqrs_mediatr.Features.Products.Notifications;
 using cqrs_mediatr.Features.Products.Queries.Get;
 using cqrs_mediatr.Features.Products.Queries.List;
+using cqrs_mediatr.Features.Users.Queries.Get;
 using cqrs_mediatr.Model;
 using cqrs_mediatr.Models;
 using FluentValidation;
 using Mediator;
+using System.Security.Claims;
 
 namespace cqrs_mediatr.Routing
 {
@@ -18,8 +21,7 @@ namespace cqrs_mediatr.Routing
         {
             var endpointBuilder = app.UseEndpoints(endpoints =>
             {
-                #region Product Endpoints
-
+                #region PRODUCTS Endpoints
                 // Get Product by Id
                 endpoints.MapGet("/product/{id:guid}", async (Guid id, ISender mediatr) =>
                 {
@@ -39,10 +41,11 @@ namespace cqrs_mediatr.Routing
                                             product);
 
                     return Results.Ok(result);
-                });
+                })
+                .RequireAuthorization();
 
                 // Get Product list
-                endpoints.MapGet("/products", async (ISender mediatr) =>
+                endpoints.MapGet("/products", async (ISender mediatr, ClaimsPrincipal claim) =>
                 {
                     var query = new ListProductsQuery();
 
@@ -50,11 +53,12 @@ namespace cqrs_mediatr.Routing
 
                     var result = new ApiResponseDto<object>(
                                             true,
-                                            "Products retrieved successfully",
+                                            $"Products retrieved successfully accesed by user {claim.Identity?.Name}",
                                             products);
 
                     return Results.Ok(result);
-                });
+                })
+                .RequireAuthorization();
 
                 // Add new Product
                 endpoints.MapPost("/product", async (
@@ -88,7 +92,8 @@ namespace cqrs_mediatr.Routing
                                                 new { id = productId });
 
                     return Results.Created($"/products/{productId}", result);
-                });
+                })
+                .RequireAuthorization();
 
                 // Update Existing product by Id
                 endpoints.MapPut("/product", async (ProductDto request,
@@ -119,18 +124,19 @@ namespace cqrs_mediatr.Routing
                                             new { id = productId });
 
                     return Results.Ok(result);
-                });
+                })
+                .RequireAuthorization();
 
                 // Delete Existing product by Id
                 endpoints.MapDelete("/product/{id:guid}", async (Guid id, ISender mediatr) =>
                 {
                     await mediatr.Send(new DeleteProductCommand(id));
                     return Results.NoContent();
-                });
+                })
+                .RequireAuthorization();
                 #endregion
 
-                #region Cart Endpoints
-
+                #region CART Endpoints
                 // Add Product to cart
                 endpoints.MapPost("/cart", async (
                         CreateCartRequest request,
@@ -149,7 +155,39 @@ namespace cqrs_mediatr.Routing
                                                 new { cartDto });
 
                     return Results.Created($"/cart/{cartDto.Id}", result);
-                });
+                })
+                .RequireAuthorization();
+                #endregion
+
+                #region USERS Endpoints
+                endpoints.MapGet("user/current", async (ISender mediator, ClaimsPrincipal claim) =>
+                {
+                    var userId = claim.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                    if (userId == null)
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "User Claim not found");
+                        return Results.NotFound(errorResponse);
+                    }
+
+                    var query = new GetUserQuery(userId);
+                    
+                    var user = await mediator.Send(query);
+
+                    if(user == null)
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "User not found");
+                        return Results.NotFound(errorResponse);
+                    }
+
+                    var result = new ApiResponseDto<object>(
+                            true,
+                            "Product retrieved successfully",
+                            user);
+
+                    return Results.Ok(result);
+                })
+                .RequireAuthorization();
                 #endregion
 
             });
