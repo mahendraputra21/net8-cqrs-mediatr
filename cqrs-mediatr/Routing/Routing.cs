@@ -1,5 +1,4 @@
-﻿using cqrs_mediatr.Domain;
-using cqrs_mediatr.Features.Carts.Commands.Create;
+﻿using cqrs_mediatr.Features.Carts.Commands.Create;
 using cqrs_mediatr.Features.Products.Commands.Create;
 using cqrs_mediatr.Features.Products.Commands.Delete;
 using cqrs_mediatr.Features.Products.Commands.Update;
@@ -11,7 +10,6 @@ using cqrs_mediatr.Model;
 using cqrs_mediatr.Models;
 using FluentValidation;
 using Mediator;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using SendGrid.Lib;
 using System.Security.Claims;
@@ -174,10 +172,10 @@ namespace cqrs_mediatr.Routing
                     }
 
                     var query = new GetUserQuery(userId);
-                    
+
                     var user = await mediator.Send(query);
 
-                    if(user == null)
+                    if (user == null)
                     {
                         var errorResponse = new ApiResponseDto<object>(false, "User not found");
                         return Results.NotFound(errorResponse);
@@ -199,10 +197,40 @@ namespace cqrs_mediatr.Routing
                     [FromBody] SendEmailRequestDto request) =>
                 {
 
+                    if (string.IsNullOrWhiteSpace(request.ToEmail))
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "Email is empty");
+                        return Results.NotFound(errorResponse);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(request.Subject))
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "Subject is empty");
+                        return Results.NotFound(errorResponse);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(request.TemplateId))
+                    {
+                        var errorResponse = new ApiResponseDto<object>(false, "Template Id is empty");
+                        return Results.NotFound(errorResponse);
+                    }
+
+
+                    // set the keyValuePair
+                    var keyValuePair = new EmailDataDto
+                    {
+                        EmailData = new Dictionary<string, string>
+                        {
+                            { "SUBJECT", request.Subject ?? "" },
+                            { "FULLNAME", "John Pantau" },
+                            { "LOGO", "https://dev-portal.invcar.com/assets/InvCar-Dark-Horizontal.png" }
+                        }
+                    };
+
                     await emailSender.SendEmailWithTemplateAsync(
                         request.ToEmail,
-                        request.Subject,
-                        request.TemplateId
+                        request.TemplateId,
+                        keyValuePair.EmailData
                         );
 
                     var result = new ApiResponseDto<object>(

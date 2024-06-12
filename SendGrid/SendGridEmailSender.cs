@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SendGrid.Helpers.Mail;
 
+
 namespace SendGrid.Lib
 {
     public interface ISendGridEmailSender
     {
-        Task SendEmailWithTemplateAsync(string toEmail, string subject, string templateId);
+        Task SendEmailWithTemplateAsync(string toEmail, string templateId, object emailData);
     }
 
 
@@ -20,18 +21,12 @@ namespace SendGrid.Lib
             _sendGridClient = sendGridClient;
         }
 
-        public async Task SendEmailWithTemplateAsync(string toEmail, string subject, string templateId)
+        public async Task SendEmailWithTemplateAsync(string toEmail, string templateId, object emailData)
         {
 
             var from = new EmailAddress(_configuration["SendGridConfig:From"], _configuration["SendGridConfig:Name"]);
             var to = new EmailAddress(toEmail);
-            var dynamicEmailData = new
-            {
-                SUBJECT = subject,
-                FULLNAME = "John Pantau",
-                LOGO = "https://dev-portal.invcar.com/assets/InvCar-Dark-Horizontal.png"
-            };
-            var msg = MailHelper.CreateSingleTemplateEmail(from, to, templateId, dynamicEmailData);
+            var msg = MailHelper.CreateSingleTemplateEmail(from, to, templateId, emailData);
             var response = await _sendGridClient.SendEmailAsync(msg);
             if (response.IsSuccessStatusCode)
             {
