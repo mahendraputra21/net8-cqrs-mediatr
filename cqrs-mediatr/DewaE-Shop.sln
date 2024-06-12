@@ -5,17 +5,17 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.Api", "DewaEShop.Api.csproj", "{5EAB057B-4923-4286-90C6-86E3605EBF1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.SendGrid", "..\SendGrid\DewaEShop.SendGrid.csproj", "{87317E5B-3426-45A5-AA90-0D61544F386B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DewaEShop.Application", "..\DewaEShop.Application\DewaEShop.Application.csproj", "{ECB817AF-B1C8-4307-9129-2F9D440AB442}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.Application", "..\DewaEShop.Application\DewaEShop.Application.csproj", "{ECB817AF-B1C8-4307-9129-2F9D440AB442}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DewaEShop.Contract", "..\DewaEShop.Contract\DewaEShop.Contract.csproj", "{A39C311E-8839-4E9F-B3C1-D1446EA70B5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.Contract", "..\DewaEShop.Contract\DewaEShop.Contract.csproj", "{A39C311E-8839-4E9F-B3C1-D1446EA70B5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DewaEShop.Domain", "..\DewaEShop.Domain\DewaEShop.Domain.csproj", "{A703D015-ADD8-4CAD-860F-7E6E3600D53F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.Domain", "..\DewaEShop.Domain\DewaEShop.Domain.csproj", "{A703D015-ADD8-4CAD-860F-7E6E3600D53F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DewaEShop.Infrastructure", "..\DewaEShop.Infrastructure\DewaEShop.Infrastructure.csproj", "{7044D14E-6867-4A60-A129-B9F2C5E12FBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.Infrastructure", "..\DewaEShop.Infrastructure\DewaEShop.Infrastructure.csproj", "{7044D14E-6867-4A60-A129-B9F2C5E12FBF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.SendGrid", "..\DewaEShop.SendGrid\DewaEShop.SendGrid.csproj", "{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{5EAB057B-4923-4286-90C6-86E3605EBF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EAB057B-4923-4286-90C6-86E3605EBF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EAB057B-4923-4286-90C6-86E3605EBF1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87317E5B-3426-45A5-AA90-0D61544F386B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87317E5B-3426-45A5-AA90-0D61544F386B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87317E5B-3426-45A5-AA90-0D61544F386B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87317E5B-3426-45A5-AA90-0D61544F386B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ECB817AF-B1C8-4307-9129-2F9D440AB442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECB817AF-B1C8-4307-9129-2F9D440AB442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECB817AF-B1C8-4307-9129-2F9D440AB442}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,17 +43,21 @@ Global
 		{7044D14E-6867-4A60-A129-B9F2C5E12FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7044D14E-6867-4A60-A129-B9F2C5E12FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7044D14E-6867-4A60-A129-B9F2C5E12FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5EAB057B-4923-4286-90C6-86E3605EBF1B} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
-		{87317E5B-3426-45A5-AA90-0D61544F386B} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 		{ECB817AF-B1C8-4307-9129-2F9D440AB442} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 		{A39C311E-8839-4E9F-B3C1-D1446EA70B5D} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 		{A703D015-ADD8-4CAD-860F-7E6E3600D53F} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 		{7044D14E-6867-4A60-A129-B9F2C5E12FBF} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
+		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51BA8893-D2F1-4EC8-BEBE-D37879BFB33D}

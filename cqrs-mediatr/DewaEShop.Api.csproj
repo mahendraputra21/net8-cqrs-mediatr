@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DewaEShop.Application\DewaEShop.Application.csproj" />
+    <ProjectReference Include="..\DewaEShop.SendGrid\DewaEShop.SendGrid.csproj" />
     <ProjectReference Include="..\SendGrid\DewaEShop.SendGrid.csproj" />
   </ItemGroup>
 
