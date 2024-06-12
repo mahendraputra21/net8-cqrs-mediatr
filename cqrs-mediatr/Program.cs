@@ -1,6 +1,7 @@
 using cqrs_mediatr.Routing;
 using cqrs_mediatr.Configuration;
 using cqrs_mediatr.Domain;
+using SendGrid.Lib.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddMediator(options =>
 
 // Registeering DI
 builder.Services.AddDependencyInjection();
+builder.Services.AddSendGridDependencyInjection(builder);
 
 var app = builder.Build();
 
