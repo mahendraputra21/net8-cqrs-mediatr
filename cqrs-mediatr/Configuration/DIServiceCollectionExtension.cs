@@ -72,7 +72,10 @@ namespace cqrs_mediatr.Configuration
 
         private static void AddIdentityConfiguration(this IServiceCollection services)
         {
-            services.AddIdentityCore<User>()
+            services.AddIdentityCore<User>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true; // need confirmation when login 
+            })
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddApiEndpoints();
         }

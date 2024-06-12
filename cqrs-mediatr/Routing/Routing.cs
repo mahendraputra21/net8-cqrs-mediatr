@@ -11,6 +11,9 @@ using cqrs_mediatr.Model;
 using cqrs_mediatr.Models;
 using FluentValidation;
 using Mediator;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using SendGrid.Lib;
 using System.Security.Claims;
 
 namespace cqrs_mediatr.Routing
@@ -182,7 +185,7 @@ namespace cqrs_mediatr.Routing
 
                     var result = new ApiResponseDto<object>(
                             true,
-                            "Product retrieved successfully",
+                            "User retrieved successfully",
                             user);
 
                     return Results.Ok(result);
@@ -190,6 +193,27 @@ namespace cqrs_mediatr.Routing
                 .RequireAuthorization();
                 #endregion
 
+                #region SENDGRID Endpoints
+                endpoints.MapPost("/sg-send-template", async (
+                    ISendGridEmailSender emailSender,
+                    [FromBody] SendEmailRequestDto request) =>
+                {
+
+                    await emailSender.SendEmailWithTemplateAsync(
+                        request.ToEmail,
+                        request.Subject,
+                        request.TemplateId
+                        );
+
+                    var result = new ApiResponseDto<object>(
+                            true,
+                            "Template email sent successfully"
+                        );
+
+                    return Results.Ok(result);
+
+                });
+                #endregion
             });
         }
     }
