@@ -1,17 +1,16 @@
-﻿using cqrs_mediatr.Features.Carts.Commands.Create;
-using cqrs_mediatr.Features.Products.Commands.Create;
-using cqrs_mediatr.Features.Products.Commands.Delete;
-using cqrs_mediatr.Features.Products.Commands.Update;
-using cqrs_mediatr.Features.Products.Notifications;
-using cqrs_mediatr.Features.Products.Queries.Get;
-using cqrs_mediatr.Features.Products.Queries.List;
-using cqrs_mediatr.Features.Users.Queries.Get;
-using cqrs_mediatr.Model;
-using cqrs_mediatr.Models;
+﻿using DewaEShop.Application.Features.Carts.Commands.Create;
+using DewaEShop.Application.Features.Products.Commands.Create;
+using DewaEShop.Application.Features.Products.Commands.Delete;
+using DewaEShop.Application.Features.Products.Commands.Update;
+using DewaEShop.Application.Features.Products.Notifications;
+using DewaEShop.Application.Features.Products.Queries.Get;
+using DewaEShop.Application.Features.Products.Queries.List;
+using DewaEShop.Application.Features.Users.Queries.Get;
+using DewaEShop.Contract;
+using DewaEShop.SendGrid;
 using FluentValidation;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using SendGrid.Lib;
 using System.Security.Claims;
 
 namespace cqrs_mediatr.Routing

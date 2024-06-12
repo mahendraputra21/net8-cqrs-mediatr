@@ -1,18 +1,17 @@
-using cqrs_mediatr.Routing;
 using cqrs_mediatr.Configuration;
-using cqrs_mediatr.Domain;
-using SendGrid.Lib.Configuration;
+using cqrs_mediatr.Routing;
+using DewaEShop.Application.Configuration;
+using DewaEShop.Domain.User;
+using DewaEShop.Infrastructure.Configuration;
+using DewaEShop.SendGrid.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Registering MediatR add pipeline behaviour
-builder.Services.AddMediator(options =>
-{
-    options.ServiceLifetime = ServiceLifetime.Scoped;
-});
-
 // Registeering DI
-builder.Services.AddDependencyInjection();
+
+builder.Services.AddInfrastructure();
+builder.Services.AddApplication();
+builder.Services.AddPresentation();
 builder.Services.AddSendGridDependencyInjection(builder);
 
 var app = builder.Build();

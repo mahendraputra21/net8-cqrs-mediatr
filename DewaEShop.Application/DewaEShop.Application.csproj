@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DewaEShop.Contract\DewaEShop.Contract.csproj" />
+	  <ProjectReference Include="..\DewaEShop.Domain\DewaEShop.Domain.csproj" />
+	  <ProjectReference Include="..\DewaEShop.Infrastructure\DewaEShop.Infrastructure.csproj" />
+	</ItemGroup>
+
+</Project>

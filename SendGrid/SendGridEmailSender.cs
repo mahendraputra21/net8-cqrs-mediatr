@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SendGrid;
 using SendGrid.Helpers.Mail;
 
 
-namespace SendGrid.Lib
+namespace DewaEShop.SendGrid
 {
     public interface ISendGridEmailSender
     {
