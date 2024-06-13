@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Mediator;
 
-namespace DewaEShop.Infrastructure.Behaviors
+namespace DewaEShop.Application.Behaviors
 {
     public class ValidationBehavior<TMessage, TResponse>(IEnumerable<IValidator<TMessage>> validators)
     : IPipelineBehavior<TMessage, TResponse>
@@ -25,7 +25,7 @@ namespace DewaEShop.Infrastructure.Behaviors
                     .ToList();
 
                 if (failures.Count > 0)
-                    throw new FluentValidation.ValidationException(failures);
+                    throw new ValidationException(failures);
             }
             return await next(message, cancellationToken).ConfigureAwait(false);
         }

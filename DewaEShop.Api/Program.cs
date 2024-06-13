@@ -1,8 +1,8 @@
-using cqrs_mediatr.Configuration;
-using cqrs_mediatr.Routing;
 using DewaEShop.Application.Configuration;
+using DewaEShop.Configuration;
 using DewaEShop.Domain.User;
 using DewaEShop.Infrastructure.Configuration;
+using DewaEShop.Routing;
 using DewaEShop.SendGrid.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);

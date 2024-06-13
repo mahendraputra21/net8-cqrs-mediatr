@@ -1,7 +1,7 @@
 ﻿using DewaEShop.Infrastructure.Persistence;
 using Mediator;
 
-namespace DewaEShop.Infrastructure.Behaviors
+namespace DewaEShop.Application.Behaviors
 {
     /// <summary>
     /// Adds transaction to the processing pipeline

@@ -13,7 +13,7 @@ using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace cqrs_mediatr.Routing
+namespace DewaEShop.Routing
 {
     public static class Routing
     {

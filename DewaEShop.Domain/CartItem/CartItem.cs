@@ -3,7 +3,7 @@
     public class CartItem
     {
         public Guid ProductId { get; set; }
-        public virtual Product.Product ? Product { get; }
+        public virtual Product.Product? Product { get; }
         public int Quantity { get; set; }
 
         private CartItem() { }

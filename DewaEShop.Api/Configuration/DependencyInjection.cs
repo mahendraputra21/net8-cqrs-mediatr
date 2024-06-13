@@ -1,11 +1,11 @@
-﻿using cqrs_mediatr.Exceptions;
-using DewaEShop.Domain.User;
+﻿using DewaEShop.Domain.User;
+using DewaEShop.Exceptions;
 using DewaEShop.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics;
 
-namespace cqrs_mediatr.Configuration
+namespace DewaEShop.Configuration
 {
     public static class DependencyInjection
     {
@@ -52,7 +52,7 @@ namespace cqrs_mediatr.Configuration
         {
             services.AddIdentityCore<User>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = true; // need confirmation when login 
+                //options.SignIn.RequireConfirmedEmail = true; // need confirmation when login 
             })
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddApiEndpoints();

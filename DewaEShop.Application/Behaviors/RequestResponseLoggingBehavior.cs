@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace DewaEShop.Infrastructure.Behaviors
+namespace DewaEShop.Application.Behaviors
 {
     public class RequestResponseLoggingBehavior<TMessage, TResponse>(ILogger<RequestResponseLoggingBehavior<TMessage, TResponse>> logger)
     : IPipelineBehavior<TMessage, TResponse>
