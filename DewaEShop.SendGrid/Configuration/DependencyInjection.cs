@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid.Extensions.DependencyInjection;
 
@@ -8,10 +9,13 @@ namespace DewaEShop.SendGrid.Configuration
     {
         public static IServiceCollection AddSendGridDependencyInjection(this IServiceCollection services, WebApplicationBuilder builder)
         {
+            services.Configure<SendGridConfig>(builder.Configuration.GetSection("SendGridConfig"));
+
             // Use SendGrid Key
             services.AddSendGrid(options =>
             {
-                options.ApiKey = builder.Configuration["SendGridConfig:APIKey"];
+                var sendGridConfig = builder.Configuration.GetSection("SendGridConfig").Get<SendGridConfig>();
+                options.ApiKey = sendGridConfig?.APIKey;
             });
 
             services.AddTransient<ISendGridEmailSender, SendGridEmailSender>();
