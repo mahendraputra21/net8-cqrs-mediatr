@@ -13,8 +13,6 @@ namespace DewaEShop.Infrastructure.Configuration
             return services;
         }
 
-
-
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<AppDbContext>());
@@ -22,7 +20,5 @@ namespace DewaEShop.Infrastructure.Configuration
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
         }
-
-
     }
 }
