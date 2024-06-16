@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewaEShop.SendGrid", "..\DewaEShop.SendGrid\DewaEShop.SendGrid.csproj", "{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DewaEShop.Test", "..\DewaEShop.Test\DewaEShop.Test.csproj", "{71CC216B-AC44-49C0-99C8-7BAA17CCE972}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71CC216B-AC44-49C0-99C8-7BAA17CCE972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71CC216B-AC44-49C0-99C8-7BAA17CCE972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71CC216B-AC44-49C0-99C8-7BAA17CCE972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71CC216B-AC44-49C0-99C8-7BAA17CCE972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{A703D015-ADD8-4CAD-860F-7E6E3600D53F} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 		{7044D14E-6867-4A60-A129-B9F2C5E12FBF} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 		{70E8C763-85B7-41C5-AE84-84AAAFCEB4C0} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
+		{71CC216B-AC44-49C0-99C8-7BAA17CCE972} = {3AE38BD3-AAB3-4A35-8E9E-4F6ECDE05D8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51BA8893-D2F1-4EC8-BEBE-D37879BFB33D}
