@@ -38,7 +38,7 @@ namespace DewaEShop.Application.Configuration
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
-        private static void AddMediatorInjection(this IServiceCollection services) 
+        private static void AddMediatorInjection(this IServiceCollection services)
         {
             services.AddMediator(options =>
             {

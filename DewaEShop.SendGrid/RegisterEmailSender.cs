@@ -42,7 +42,7 @@ namespace DewaEShop.SendGrid
             // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             message.SetClickTracking(false, false);
 
-            var response =await _sendGridClient.SendEmailAsync(message);
+            var response = await _sendGridClient.SendEmailAsync(message);
             if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Email has been sent successfully to {Email}", email);

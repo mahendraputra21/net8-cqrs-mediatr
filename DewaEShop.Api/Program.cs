@@ -37,7 +37,13 @@ app.UseAuthorization();
 app.UseExceptionHandler();
 
 // Register Routing endpoints
-Routing.MapRoutes(app);
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapProductApi();
+    endpoints.MapCartApi();
+    endpoints.MapUsersApi();
+    endpoints.MapSendGridApi();
+});
 
 app.Run();
 
