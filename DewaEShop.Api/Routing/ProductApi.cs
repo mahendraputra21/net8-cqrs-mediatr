@@ -11,11 +11,14 @@ using System.Security.Claims;
 
 namespace DewaEShop.Routing
 {
-    public static class ProductApi
+    public static class ProductApi 
     {
         public static IEndpointRouteBuilder MapProductApi(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("api/product/{id:guid}", async (Guid id, ISender mediatr) =>
+            var baseAPI = new BaseApi(endpoints);
+            var productRoutes = baseAPI.CreateRouteGroup(endpoints, "products").MapToApiVersion(1);
+
+            productRoutes.MapGet("{id:guid}", async (Guid id, ISender mediatr) =>
             {
                 var query = new GetProductQuery(id);
                 var product = await mediatr.Send(query);
@@ -31,7 +34,7 @@ namespace DewaEShop.Routing
             });
             //.RequireAuthorization();
 
-            endpoints.MapGet("api/products", async (ISender mediatr, ClaimsPrincipal claim) =>
+            productRoutes.MapGet("/", async (ISender mediatr, ClaimsPrincipal claim) =>
             {
                 var query = new ListProductsQuery();
                 var products = await mediatr.Send(query);
@@ -41,7 +44,7 @@ namespace DewaEShop.Routing
             });
             //.RequireAuthorization();
 
-            endpoints.MapPost("api/product", async (ProductDto request, IMediator mediatr, IValidator<CreateProductCommand> validator) =>
+            productRoutes.MapPost("/", async (ProductDto request, IMediator mediatr, IValidator<CreateProductCommand> validator) =>
             {
                 var command = new CreateProductCommand(request.Name, request.Description, request.Price);
                 var validationResult = await validator.ValidateAsync(command);
@@ -63,7 +66,7 @@ namespace DewaEShop.Routing
             });
             //.RequireAuthorization();
 
-            endpoints.MapPut("api/product", async (ProductDto request, ISender mediatr, IValidator<UpdateProductCommand> validator) =>
+            productRoutes.MapPut("/", async (ProductDto request, ISender mediatr, IValidator<UpdateProductCommand> validator) =>
             {
                 var command = new UpdateProductCommand(request.Id, request.Name, request.Description, request.Price);
                 var validationResult = await validator.ValidateAsync(command);
@@ -84,7 +87,7 @@ namespace DewaEShop.Routing
             });
             //.RequireAuthorization();
 
-            endpoints.MapDelete("api/product/{id:guid}", async (Guid id, ISender mediatr) =>
+            productRoutes.MapDelete("{id:guid}", async (Guid id, ISender mediatr) =>
             {
                 await mediatr.Send(new DeleteProductCommand(id));
                 return Results.NoContent();

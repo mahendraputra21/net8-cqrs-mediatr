@@ -8,15 +8,18 @@ namespace DewaEShop.Routing
     {
         public static IEndpointRouteBuilder MapCartApi(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost("api/cart", async (CreateCartRequest request, ISender mediatr) =>
+            var baseAPI = new BaseApi(endpoints);
+            var cartsRoutes = baseAPI.CreateRouteGroup(endpoints, "carts").MapToApiVersion(1);
+
+            cartsRoutes.MapPost("/", async (CreateCartRequest request, ISender mediatr) =>
             {
                 var command = new CreateCartCommand(request.CartId, request.ProductId, request.Quantity);
                 var cartDto = await mediatr.Send(command);
 
                 var result = new ApiResponseDto<object>(true, "Product Added successfully to Cart", new { cartDto });
                 return Results.Created($"/cart/{cartDto.Id}", result);
-            })
-            .RequireAuthorization();
+            });
+            //.RequireAuthorization();
 
             return endpoints;
         }

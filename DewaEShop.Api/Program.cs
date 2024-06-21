@@ -1,6 +1,5 @@
 using DewaEShop.Application.Configuration;
 using DewaEShop.Configuration;
-using DewaEShop.Domain.User;
 using DewaEShop.Infrastructure.Configuration;
 using DewaEShop.Routing;
 using DewaEShop.SendGrid.Configuration;
@@ -23,7 +22,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DewaEShop API v1.0");
+        c.SwaggerEndpoint("/swagger/v2/swagger.json", "DewaEShop API v2.0");
+        c.SwaggerEndpoint("/swagger/v3/swagger.json", "DewaEShop API v3.0");
+        c.SwaggerEndpoint("/swagger/v4/swagger.json", "DewaEShop API v4.0");
+        c.SwaggerEndpoint("/swagger/v5/swagger.json", "DewaEShop API v5.0");
+    });
 }
 
 app.UseHttpsRedirection();
