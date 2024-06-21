@@ -8,7 +8,10 @@ namespace DewaEShop.Routing
     {
         public static IEndpointRouteBuilder MapSendGridApi(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost("api/sg-send-template", async (ISendGridEmailSender emailSender, [FromBody] SendEmailRequestDto request) =>
+            var baseAPI = new BaseApi(endpoints);
+            var sendGridRoutes = baseAPI.CreateRouteGroup(endpoints, "sendgrid").MapToApiVersion(1);
+
+            sendGridRoutes.MapPost("send-template-test", async (ISendGridEmailSender emailSender, [FromBody] SendEmailRequestDto request) =>
             {
                 if (string.IsNullOrWhiteSpace(request.ToEmail))
                 {

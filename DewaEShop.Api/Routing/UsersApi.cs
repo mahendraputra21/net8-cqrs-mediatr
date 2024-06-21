@@ -9,7 +9,10 @@ namespace DewaEShop.Routing
     {
         public static IEndpointRouteBuilder MapUsersApi(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("api/user/current", async (ISender mediator, ClaimsPrincipal claim) =>
+            var baseAPI = new BaseApi(endpoints);
+            var usersRoutes = baseAPI.CreateRouteGroup(endpoints, "users").MapToApiVersion(1);
+
+            usersRoutes.MapGet("/current", async (ISender mediator, ClaimsPrincipal claim) =>
             {
                 var userId = claim.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
