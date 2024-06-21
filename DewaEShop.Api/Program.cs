@@ -17,7 +17,7 @@ builder.Services.AddSendGridDependencyInjection(builder);
 var app = builder.Build();
 
 // add Identity endpoints
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -37,7 +37,13 @@ app.UseAuthorization();
 app.UseExceptionHandler();
 
 // Register Routing endpoints
-Routing.MapRoutes(app);
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapProductApi();
+    endpoints.MapCartApi();
+    endpoints.MapUsersApi();
+    endpoints.MapSendGridApi();
+});
 
 app.Run();
 

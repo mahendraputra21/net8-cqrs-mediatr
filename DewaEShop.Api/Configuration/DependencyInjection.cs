@@ -52,10 +52,10 @@ namespace DewaEShop.Configuration
         {
             services.AddIdentityCore<User>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = true; // need confirmation when login 
+                //options.SignIn.RequireConfirmedEmail = true; // need confirmation when login 
             })
-                    .AddEntityFrameworkStores<AppDbContext>()
-                    .AddApiEndpoints();
+                    .AddEntityFrameworkStores<AppDbContext>();
+                    //.AddApiEndpoints();
         }
 
         private static void AddSwaggerConfiguration(this IServiceCollection services)
@@ -89,6 +89,5 @@ namespace DewaEShop.Configuration
                  });
             });
         }
-
     }
 }
