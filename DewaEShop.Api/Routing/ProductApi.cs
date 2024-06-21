@@ -15,7 +15,7 @@ namespace DewaEShop.Routing
     {
         public static IEndpointRouteBuilder MapProductApi(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/product/{id:guid}", async (Guid id, ISender mediatr) =>
+            endpoints.MapGet("api/product/{id:guid}", async (Guid id, ISender mediatr) =>
             {
                 var query = new GetProductQuery(id);
                 var product = await mediatr.Send(query);
@@ -28,20 +28,20 @@ namespace DewaEShop.Routing
 
                 var result = new ApiResponseDto<object>(true, "Product retrieved successfully", product);
                 return Results.Ok(result);
-            })
-            .RequireAuthorization();
+            });
+            //.RequireAuthorization();
 
-            endpoints.MapGet("/products", async (ISender mediatr, ClaimsPrincipal claim) =>
+            endpoints.MapGet("api/products", async (ISender mediatr, ClaimsPrincipal claim) =>
             {
                 var query = new ListProductsQuery();
                 var products = await mediatr.Send(query);
 
                 var result = new ApiResponseDto<object>(true, $"Products retrieved successfully accessed by user {claim.Identity?.Name}", products);
                 return Results.Ok(result);
-            })
-            .RequireAuthorization();
+            });
+            //.RequireAuthorization();
 
-            endpoints.MapPost("/product", async (ProductDto request, IMediator mediatr, IValidator<CreateProductCommand> validator) =>
+            endpoints.MapPost("api/product", async (ProductDto request, IMediator mediatr, IValidator<CreateProductCommand> validator) =>
             {
                 var command = new CreateProductCommand(request.Name, request.Description, request.Price);
                 var validationResult = await validator.ValidateAsync(command);
@@ -60,10 +60,10 @@ namespace DewaEShop.Routing
                 await mediatr.Publish(new ProductCreatedNotification(productId));
                 var result = new ApiResponseDto<object>(true, "Product created successfully", new { id = productId });
                 return Results.Created($"/products/{productId}", result);
-            })
-            .RequireAuthorization();
+            });
+            //.RequireAuthorization();
 
-            endpoints.MapPut("/product", async (ProductDto request, ISender mediatr, IValidator<UpdateProductCommand> validator) =>
+            endpoints.MapPut("api/product", async (ProductDto request, ISender mediatr, IValidator<UpdateProductCommand> validator) =>
             {
                 var command = new UpdateProductCommand(request.Id, request.Name, request.Description, request.Price);
                 var validationResult = await validator.ValidateAsync(command);
@@ -81,15 +81,15 @@ namespace DewaEShop.Routing
 
                 var result = new ApiResponseDto<object>(true, "Product updated successfully", new { id = productId });
                 return Results.Ok(result);
-            })
-            .RequireAuthorization();
+            });
+            //.RequireAuthorization();
 
-            endpoints.MapDelete("/product/{id:guid}", async (Guid id, ISender mediatr) =>
+            endpoints.MapDelete("api/product/{id:guid}", async (Guid id, ISender mediatr) =>
             {
                 await mediatr.Send(new DeleteProductCommand(id));
                 return Results.NoContent();
-            })
-            .RequireAuthorization();
+            });
+            //.RequireAuthorization();
 
             return endpoints;
         }

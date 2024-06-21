@@ -54,8 +54,8 @@ namespace DewaEShop.Configuration
             {
                 //options.SignIn.RequireConfirmedEmail = true; // need confirmation when login 
             })
-                    .AddEntityFrameworkStores<AppDbContext>()
-                    .AddApiEndpoints();
+                    .AddEntityFrameworkStores<AppDbContext>();
+                    //.AddApiEndpoints();
         }
 
         private static void AddSwaggerConfiguration(this IServiceCollection services)

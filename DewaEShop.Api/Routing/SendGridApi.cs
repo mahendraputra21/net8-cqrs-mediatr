@@ -8,7 +8,7 @@ namespace DewaEShop.Routing
     {
         public static IEndpointRouteBuilder MapSendGridApi(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost("/sg-send-template", async (ISendGridEmailSender emailSender, [FromBody] SendEmailRequestDto request) =>
+            endpoints.MapPost("api/sg-send-template", async (ISendGridEmailSender emailSender, [FromBody] SendEmailRequestDto request) =>
             {
                 if (string.IsNullOrWhiteSpace(request.ToEmail))
                 {
@@ -31,11 +31,11 @@ namespace DewaEShop.Routing
                 var keyValuePair = new EmailDataDto
                 {
                     EmailData = new Dictionary<string, string>
-                {
-                    { "SUBJECT", request.Subject ?? "" },
-                    { "FULLNAME", "John Pantau" },
-                    { "LOGO", "https://dev-portal.invcar.com/assets/InvCar-Dark-Horizontal.png" }
-                }
+                    {
+                        { "SUBJECT", request.Subject ?? "" },
+                        { "FULLNAME", "John Pantau" },
+                        { "LOGO", "https://dev-portal.invcar.com/assets/InvCar-Dark-Horizontal.png" }
+                    }
                 };
 
                 await emailSender.SendEmailWithTemplateAsync(request.ToEmail, request.TemplateId, keyValuePair.EmailData);

@@ -17,7 +17,7 @@ builder.Services.AddSendGridDependencyInjection(builder);
 var app = builder.Build();
 
 // add Identity endpoints
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
